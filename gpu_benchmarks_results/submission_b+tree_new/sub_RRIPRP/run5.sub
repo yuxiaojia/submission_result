@@ -1,0 +1,23 @@
+universe = docker
+docker_image =gcr.io/gem5-test/gcn-gpu:v22-1
+
+initialdir = results
+log=chtc.log.$(ClusterId)
+error=chtc.err.$(ClusterId)
+output=output.txt.$(ClusterId)
+
+executable = cpcoh.sh
+# set up my own directory with benchmark from nobackup
+arguments =  b+tree/ $(ClusterId) b+tree.out 4MB RRIPRP file b+tree/mil.txt command b+tree/command.txt
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT_OR_EVICT
+# need my own directory for gem5 from nobackup
+transfer_input_files = ../../gem5/, ../../rodinia/b+tree
+transfer_output_files = m5out.$(ClusterId)
+stream_output = True
+
+request_cpus = 1
+request_memory = 16GB
+request_disk = 12GB
+
+queue 1
